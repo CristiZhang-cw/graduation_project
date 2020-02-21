@@ -6,6 +6,7 @@ const app = express()
 app.use(bodyParser.json())
 app.use(morgan('conbined'))
 
+require('./router')(app)
 // app.get('/',(requset,response) =>{
 //     response.send({
 //         msg: 'Hello node'
@@ -13,7 +14,7 @@ app.use(morgan('conbined'))
 // })
 
 sequelize
-  .sync({force:true}) //调用sync()根据model自动在数据库中创建表  force:true强制更新，即使已经判断表已经存在，还是会删除旧的表再创建新的表
+  .sync() //调用sync()根据model自动在数据库中创建表  force:true强制更新，即使已经判断表已经存在，还是会删除旧的表再创建新的表
   .then(() => {
     console.log('Connection has been established successfully.');
   })

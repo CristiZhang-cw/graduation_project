@@ -5,7 +5,7 @@ module.exports = (sequelize,DataTypes) => {
 
     Model.init({
         userId:{
-            type: DataTypes.STRING, //string类型
+            type: DataTypes.INTEGER, //整型
             unique: true,
             allowNull: false
         },
