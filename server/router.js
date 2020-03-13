@@ -11,4 +11,5 @@ module.exports = (app) => {
     app.post('/select',UserController.select)
     app.post('/update',UserController.update)
     app.post('/register',UserController.register)
+    app.post('/delete',UserController.delete)
 }

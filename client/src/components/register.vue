@@ -3,7 +3,7 @@
         <div class="header-container">
             <div class="header"></div>
         </div>
-        <el-form class="registerForm" ref="form" :model="form" label-width="100px" :rules="rules">
+        <el-form class="registerForm" ref="registerForm" :model="form" label-width="100px" :rules="rules">
             <h2>注册</h2>
             <el-form-item label="学号/工号" prop="userId">
                 <el-input v-model.number="form.userId"></el-input>
@@ -19,7 +19,7 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="register()">注册</el-button>
+                <el-button type="primary" @click="register('registerForm')">注册</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -65,7 +65,16 @@ export default {
         };
     },
     methods: {
-        register() {}
+        register(formName) {
+            this.$refs[formName].validate((valid) => {
+                if(valid) {
+                    alert('已提交')
+                } else {
+                    console.log('error');
+                    return false
+                }
+            });
+        }
     }
 };
 </script>
