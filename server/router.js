@@ -8,8 +8,10 @@ module.exports = (app) => {
             msg: 'Hello node'
         })
     })
-    app.post('/select',UserController.select)
-    app.post('/update',UserController.update)
-    app.post('/register',UserController.register)
-    app.post('/delete',UserController.delete)
+    
+    app.post('/login',UserController.login)         //登录
+    app.post('/register',UserController.register)  //账号增
+    app.post('/delete',UserController.delete)       //账号删
+    app.post('/update',UserController.update)       //账号改
+    app.post('/select',UserController.select)       //账号查
 }
