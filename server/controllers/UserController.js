@@ -1,6 +1,14 @@
 const { User } = require('../models')
+const config = require('../config')
+const jwt = require('jsonwebtoken')
 
-
+function tokenSign({ id, userId }) {  //生成token
+    try {
+        return jwt.sign({ id, userId }, config.token.secretOrPrivateKey, config.token.options)
+    } catch (error) {
+        throw (error)
+    }
+}
 
 module.exports = {
     async register(request, response) {    //增加
@@ -51,7 +59,7 @@ module.exports = {
             })
         }
     },
-    async delete(request, response) {
+    async delete(request, response) { //删除
         try {
             await User.destroy(
                 {
@@ -65,17 +73,18 @@ module.exports = {
             response.status(500).send({ message: '数据删除失败' })
         }
     },
-    async login(request, response) {
+    async login(request, response) { //登录
         try {
             const user = await User.findOne({
                 where: {
                     userId: request.body.userId   //先根据ID查找数据
                 }
             })
-            let isValidPassword = user.comparePassword(request.body.password)  //比较查找的数据与输入的数据是否一致
+            let isValidPassword = user.comparePassword(request.body.password)  //比较查找的数据与输入的数据是否一致  
             if (isValidPassword) {
                 response.send({
-                    user: user.toJSON()
+                    user: user.toJSON(),
+                    token: tokenSign(user) //验证登录信息正确后，调用tokenSign函数 返回创建的token
                 })
             }
         } catch (error) {

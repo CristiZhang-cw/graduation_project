@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const MD5 = require('crypto-js/md5')  //引入crypto
 
-function hashPassword(user,options) {
+function hashPassword(user,options) {  //password改动的时候对其进行MD5加密
     if(user.changed('password')) {
         user.password = MD5(user.password).toString()
     }
