@@ -3,7 +3,13 @@
         <div class="header-container">
             <div class="header"></div>
         </div>
-        <el-form class="registerForm" ref="registerForm" :model="form" label-width="100px" :rules="rules">
+        <el-form
+            class="registerForm"
+            ref="registerForm"
+            :model="form"
+            label-width="100px"
+            :rules="rules"
+        >
             <h2>注册</h2>
             <el-form-item label="学号/工号" prop="userId">
                 <el-input v-model.number="form.userId"></el-input>
@@ -20,6 +26,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="register('registerForm')">注册</el-button>
+                <el-button type="primary" @click="reset('registerForm')">重置</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -32,7 +39,7 @@ export default {
         return {
             form: {
                 userId: "",
-                form: "",
+                password: "",
                 role: ""
             },
             rules: {
@@ -66,14 +73,44 @@ export default {
     },
     methods: {
         register(formName) {
-            this.$refs[formName].validate((valid) => {
-                if(valid) {
-                    alert('已提交')
+            this.$refs[formName].validate(valid => {
+                if (valid) {
+                    this.$confirm("是否确定进行注册?", "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning"
+                    }).then(() => {
+                        let self = this;
+                        let params = {
+                            userId: self.form.userId,
+                            password: self.form.password,
+                            role: self.form.role
+                        };
+                        self.$axios({
+                            method: 'post',
+                            url: '/register',
+                            data: params
+                        }).then(function(response) {
+                            if (response.data.result == 1) {
+                                self.$message.success("注册成功");
+                                setTimeout(() => {
+                                    self.$router.push({
+                                        name: "login"
+                                    });
+                                }, 1000);
+                            } else {
+                                self.$message.error("注册失败，请检查注册信息");
+                            }
+                        });
+                    });
                 } else {
-                    console.log('error');
-                    return false
+                    console.log("error");
+                    return false;
                 }
             });
+        },
+        reset(formName) {
+            this.$refs[formName].resetFields();
         }
     }
 };

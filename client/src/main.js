@@ -3,11 +3,16 @@ import App from './App.vue';
 import router from './router/index.js';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import axios from 'axios'
+import axios from 'axios';
+import api from './api/mainApi'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
-Vue.prototype.$axios = axios
+Vue.prototype.$axios = axios //全局注册axios,使用方法为this.$axios
+axios.defaults.baseURL = '/api'
+Vue.prototype.$api = api //全局注册api，使用方法为this.$api
+
+
 new Vue({
   router,
   render: h => h(App),

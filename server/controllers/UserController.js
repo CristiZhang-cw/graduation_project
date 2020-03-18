@@ -14,7 +14,10 @@ module.exports = {
     async register(request, response) {    //增加
         try {
             const user = await User.create(request.body)
-            response.status(200).send({ user })
+            response.status(200).send({
+                result: 1,
+                user: user
+            })
         } catch (error) {
             response.status(400).send({
                 code: 400,
