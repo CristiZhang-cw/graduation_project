@@ -17,6 +17,9 @@
             <el-form-item label="密码" prop="password">
                 <el-input v-model="form.password" show-password></el-input>
             </el-form-item>
+            <el-form-item label="确认密码" prop="confirmPassword">
+                <el-input v-model="form.confirmPassword" show-password></el-input>
+            </el-form-item>
             <el-form-item label="您的身份是" prop="role">
                 <el-radio-group v-model="form.role">
                     <el-radio label="1">学生</el-radio>
@@ -40,6 +43,7 @@ export default {
             form: {
                 userId: "",
                 password: "",
+                confirmPassword: "",
                 role: ""
             },
             rules: {
@@ -59,6 +63,22 @@ export default {
                         min: 6,
                         max: 16,
                         trigger: "blur"
+                    }
+                ],
+                confirmPassword: [
+                    {
+                        type: "string",
+                        required: true,
+                        trigger: "blur",
+                        validator: function(rule, value, callback) {
+                            if (value === "") {
+                                callback(new Error("请再次确认密码"));
+                            } else if (value !== this.password) {   //这里的this指向rules
+                                callback(new Error("两次输入的密码不一致"));
+                            } else {
+                                callback();
+                            }
+                        }
                     }
                 ],
                 role: [
@@ -87,8 +107,8 @@ export default {
                             role: self.form.role
                         };
                         self.$axios({
-                            method: 'post',
-                            url: '/register',
+                            method: "post",
+                            url: self.$api.login.register,
                             data: params
                         }).then(function(response) {
                             if (response.data.result == 1) {

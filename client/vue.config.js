@@ -13,14 +13,14 @@ module.exports = {
   lintOnSave: false, //取消ESlint校验代码
 
   devServer: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        // ws: true,
-        // secure:false,
-        changeOrigin: true, 
+    proxy: { //配置代理解决跨域问题
+      '/api': {  //默认遇到/api，就会把默认的域名(http://localhost:8080)换成目标域名
+        target: 'http://localhost:3000',  //目标API地址
+        // ws: true,  //websockets
+        // secure:false, //http为false，https为true
+        changeOrigin: true,  //开启代理
         pathRewrite: {
-          '^/api': '/'
+          '^/api': '/' //重写路径，替换掉/api
         }
       }
     }

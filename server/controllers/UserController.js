@@ -86,6 +86,7 @@ module.exports = {
             let isValidPassword = user.comparePassword(request.body.password)  //比较查找的数据与输入的数据是否一致  
             if (isValidPassword) {
                 response.send({
+                    result: 1,
                     user: user.toJSON(),
                     token: tokenSign(user) //验证登录信息正确后，调用tokenSign函数 返回创建的token
                 })

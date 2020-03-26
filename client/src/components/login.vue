@@ -9,7 +9,7 @@
                 <el-input v-model="form.password" placeholder="请输入密码" show-password></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" :disabled="isDisabled" @click="login()">登录</el-button>
+                <el-button type="primary" :disabled="isDisabled" @click="login('form')">登录</el-button>
                 <el-button type="primary" @click="register()">注册</el-button>
             </el-form-item>
         </el-form>
@@ -49,17 +49,40 @@ export default {
         };
     },
     methods: {
-        login() {
-            // let self = this;
-            // self.$axios({
-            //     method:'post',
-            //     url:"",
-            //     data:"",
-            // }).then(function(res){
-            //     if(res.result == 1){
-                    
-            //     }
-            // })
+        login(formName) {
+            this.$refs[formName].validate(valid => {
+                if (valid) {
+                    this.$confirm("是否确认登陆?", "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning"
+                    }).then(() => {
+                        let self = this;
+                        let params = {
+                            userId: self.form.userName,
+                            password: self.form.password
+                        };
+                        self.$axios({
+                            method: "post",
+                            url: self.$api.login.login,
+                            data: params
+                        }).then(response => {
+                            if(response.data.result == 1){
+                                self.$message.success("登录成功")
+                                self.$store.commit({
+                                    type: 'addAccount',
+                                    token: response.data.token
+                                })
+                                self.$router.push({
+                                    name: 'index'
+                                })
+                            } else {
+                                self.$message.error("账号或密码错误")
+                            }
+                        });
+                    });
+                }
+            });
         },
         register() {
             this.$router.push({
