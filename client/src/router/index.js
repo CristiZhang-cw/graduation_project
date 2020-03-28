@@ -10,7 +10,35 @@ const routes = [
     {
         path: '/index',
         name: 'index',
+        redirect: '/index/indexSelf',
         component: () => import('@/index'),
+        children: [
+            {
+                path: 'indexSelf',
+                name: 'indexSelf',
+                component: () => import('@/indexSelf')
+            },
+            {
+                path: 'fileInfoManagement',
+                name: 'fileInfoManagement',
+                component: () => import('@/fileInfoManagement')
+            },
+            {
+                path: 'deletedFileManagement',
+                name: 'deletedFileManagement',
+                component: () => import('@/deletedFileManagement')
+            },
+            {
+                path: 'accountManagement',
+                name: 'accountManagement',
+                component: () => import('@/accountManagement')
+            },
+            {
+                path: 'messageBoard',
+                name: 'messageBoard',
+                component: () => import('@/messageBoard')
+            }
+        ],
         meta: {
             title: '首页',
             requireAuth: true,
@@ -31,12 +59,21 @@ const routes = [
         meta: {
             title: '注册'
         }
+    },
+    {
+        path: '/profile',
+        name: 'profile',
+        component: () => import('@/profile'),
+        meta: {
+            title: '个人中心',
+            requireAuth: true
+        }
     }
 ]
 const router = new VueRouter({
     base: '/profileSystem',
     mode: 'history',
-    routes: routes
+    routes
 })
 
 export default router

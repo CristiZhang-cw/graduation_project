@@ -90,8 +90,13 @@ module.exports = {
                     user: user.toJSON(),
                     token: tokenSign(user) //验证登录信息正确后，调用tokenSign函数 返回创建的token
                 })
+            } else {   //用户名正确密码不正确时
+                response.status(403).send({
+                    code: 403,
+                    error: '用户名或密码错误'
+                })    
             }
-        } catch (error) {
+        } catch (error) { //用户名不存在时
             response.status(403).send({
                 code: 403,
                 error: '用户名或密码错误'

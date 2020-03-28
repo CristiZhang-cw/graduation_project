@@ -73,7 +73,8 @@ export default {
                         validator: function(rule, value, callback) {
                             if (value === "") {
                                 callback(new Error("请再次确认密码"));
-                            } else if (value !== this.password) {   //这里的this指向rules
+                            } else if (value !== this.password) {
+                                //这里的this指向rules
                                 callback(new Error("两次输入的密码不一致"));
                             } else {
                                 callback();

@@ -66,20 +66,25 @@ export default {
                             method: "post",
                             url: self.$api.login.login,
                             data: params
-                        }).then(response => {
-                            if(response.data.result == 1){
-                                self.$message.success("登录成功")
-                                self.$store.commit({
-                                    type: 'addAccount',
-                                    token: response.data.token
-                                })
-                                self.$router.push({
-                                    name: 'index'
-                                })
-                            } else {
-                                self.$message.error("账号或密码错误")
+                        }).then(
+                            response => {
+                                if (response.data.result == 1) {
+                                    self.$message.success("登录成功");
+                                    self.$store.commit({
+                                        type: "addAccount",
+                                        token: response.data.token
+                                    });
+                                    self.$router.push({
+                                        name: "index"
+                                    });
+                                }
+                            },
+                            error => {
+                                console.log(error);
+                                self.$message.error("用户名或密码错误");
+                                
                             }
-                        });
+                        );
                     });
                 }
             });

@@ -34,7 +34,7 @@ module.exports = (sequelize,DataTypes) => {
     },
     {
         hooks: {
-            afterValidate: hashPassword
+            afterValidate: hashPassword //验证通过后调用hashpassword函数
         },
         sequelize,
         modelName: 'User'  //根据modelName决定数据表名

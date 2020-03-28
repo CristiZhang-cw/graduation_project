@@ -14,13 +14,11 @@ const store = new Vuex.Store({
             state.token = payload.token
         },
         removeAccount(state,payload) {
-            sessionStorage.removeItem('token',payload.token)
+            sessionStorage.removeItem('token')
             state.token = payload.token
         }
     },
-    actions: {
-
-    }
+    actions: {}
 })
 
 export default store
