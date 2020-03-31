@@ -89,8 +89,6 @@ export default {
             }
         },
         userCommand(command) {
-            console.log(command);
-            console.log(this);
             this[command]();
         },
         profile() {
@@ -106,7 +104,8 @@ export default {
             }).then(() => {
                 this.$store.commit({
                     type: "removeAccount",
-                    token: ""
+                    token: "",
+                    ID: ""
                 });
                 this.$router.push({
                     name: "login"
@@ -121,7 +120,11 @@ export default {
                 name: "indexSelf"
             });
         },
-        fileInfo() {},
+        fileInfo() {
+            this.$router.push({
+                name: 'fileInfoManagement'
+            })
+        },
         deletedFile() {},
         userAccount() {},
         messageBoard() {}

@@ -18,7 +18,6 @@ Vue.prototype.$echarts = echarts //全局注册echarts
 //路由判断登录，根据路由配置文件的参数
 router.beforeEach((to, from, next) => {
   document.title = to.matched[0].meta.title
-  store.state.token = sessionStorage.getItem('token')
   if (to.matched.some(record => record.meta.requireAuth)) { //判断该路由是否需要登陆权限
     if (store.state.token) { //判断当前的token是否存在；登陆时存入的token
       next();

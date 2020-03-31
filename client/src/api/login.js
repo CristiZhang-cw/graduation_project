@@ -1,5 +1,5 @@
-const register = '/register'
-const login = '/login'
+const register = '/user/register'
+const login = '/user/login'
 
 export default {
     register,

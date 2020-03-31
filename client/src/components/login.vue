@@ -9,7 +9,7 @@
                 <el-input v-model="form.password" placeholder="请输入密码" show-password></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" :disabled="isDisabled" @click="login('form')">登录</el-button>
+                <el-button type="primary" @click="login('form')">登录</el-button>
                 <el-button type="primary" @click="register()">注册</el-button>
             </el-form-item>
         </el-form>
@@ -21,7 +21,6 @@ export default {
     name: "login",
     data() {
         return {
-            isDisabled: false,
             form: {
                 userName: "",
                 password: ""
@@ -72,7 +71,8 @@ export default {
                                     self.$message.success("登录成功");
                                     self.$store.commit({
                                         type: "addAccount",
-                                        token: response.data.token
+                                        token: response.data.token,
+                                        ID: response.data.id
                                     });
                                     self.$router.push({
                                         name: "index"

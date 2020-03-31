@@ -7,19 +7,19 @@
           <!-- gutter设置栅栏的间隔 -->
             <el-row gutter="20">
                 <el-col :span="8">
-                    <el-card>
+                    <el-card shadow="hover">
                         <div slot="header">用户总数</div>
                         <div>{{cardData.userCount}}</div>
                     </el-card>
                 </el-col>
                 <el-col :span="8">
-                    <el-card>
+                    <el-card shadow="hover">
                         <div slot="header">档案数量</div>
                         <div>{{cardData.fileCount}}</div>
                     </el-card>
                 </el-col>
                 <el-col :span="8">
-                    <el-card>
+                    <el-card shadow="hover">
                         <div slot="header">总访问次数</div>
                         <div>{{cardData.visitCount}}</div>
                     </el-card>
@@ -27,7 +27,6 @@
             </el-row>
             <h6 class="echarts-title">近七天访问数据</h6>
             <echarts></echarts>
-            <div>1</div>
         </el-main>
     </el-container>
 </template>
@@ -39,9 +38,9 @@ export default {
     data() {
         return {
             cardData: {
-                userCount: "",
-                fileCount: "",
-                visitCount: ""
+                userCount: "1235",
+                fileCount: "942",
+                visitCount: "3127"
             }
         };
     }

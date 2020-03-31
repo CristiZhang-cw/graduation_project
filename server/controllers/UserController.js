@@ -46,8 +46,7 @@ module.exports = {
     },
     async update(request, response) { //更新
         try {
-            const user = await User.update(
-                request.body,
+            const user = await User.update(request.body,
                 {
                     where: {
                         id: request.body.id  //根据主键更改表内数据
@@ -94,7 +93,7 @@ module.exports = {
                 response.status(403).send({
                     code: 403,
                     error: '用户名或密码错误'
-                })    
+                })
             }
         } catch (error) { //用户名不存在时
             response.status(403).send({

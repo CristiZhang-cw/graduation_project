@@ -6,12 +6,14 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         token: '',
-        userId: ''
+        ID: '',
+        fileID: ''
     },
     mutations: {
         addAccount(state, payload) {
             sessionStorage.setItem('token',payload.token)
             state.token = payload.token
+            state.ID = payload.ID
         },
         removeAccount(state,payload) {
             sessionStorage.removeItem('token')
