@@ -7,7 +7,7 @@
                     type="primary"
                     icon="el-icon-plus"
                     class="newFile"
-                    @click="newfile()"
+                    @click="newFile('fileInfo')"
                 >新增档案</el-button>
             </div>
         </el-header>
@@ -23,13 +23,17 @@
                 <el-form-item label="查询档案" prop="userId">
                     <el-input
                         class="search-input"
-                        v-model.number="searchForm.userId"
+                        v-model="searchForm.userId"
                         el-icon-plus
                         placeholder="请输入需要查询的用户ID"
                     ></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="searchFile('searchForm')">查询档案</el-button>
+                    <el-button
+                        type="primary"
+                        @click="searchFile('searchForm')"
+                        :loading="buttonLoading"
+                    >查询档案</el-button>
                 </el-form-item>
             </el-form>
             <el-form
@@ -38,7 +42,7 @@
                 :model="fileInfo"
                 label-width="100px"
                 :rules="fileRules"
-                v-if="isFormShow"
+                v-show="isFormShow"
             >
                 <el-row>
                     <el-col :span="24" class="infoTitle">基本信息</el-col>
@@ -46,7 +50,7 @@
                 <el-row :gutter="20">
                     <el-col :span="8">
                         <el-form-item label="学号：" prop="userId">
-                            <el-input v-model.number="fileInfo.userId" :readonly="readonly"></el-input>
+                            <el-input v-model="fileInfo.userId" :readonly="readonly"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -73,7 +77,7 @@
                         <el-form-item label="证件类型：" prop="certificate">
                             <el-select
                                 style="width:100%"
-                                v-model.number="fileInfo.certificate"
+                                v-model="fileInfo.certificate"
                                 placeholder="请选择证件类型："
                                 :disabled="readonly"
                             >
@@ -85,10 +89,7 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="证件号码：" prop="certifiacteNumber">
-                            <el-input
-                                v-model.number="fileInfo.certifiacteNumber"
-                                :readonly="readonly"
-                            ></el-input>
+                            <el-input v-model="fileInfo.certifiacteNumber" :readonly="readonly"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -276,12 +277,12 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="电话号码：" prop="phoneNumber">
-                            <el-input v-model.number="fileInfo.phoneNumber"></el-input>
+                            <el-input v-model="fileInfo.phoneNumber"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="家庭电话：" prop="familyNumber">
-                            <el-input v-model.number="fileInfo.familyNumber"></el-input>
+                            <el-input v-model="fileInfo.familyNumber"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -293,12 +294,12 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="邮政编码：" prop="mailNumber">
-                            <el-input v-model.number="fileInfo.mailNumber"></el-input>
+                            <el-input v-model="fileInfo.mailNumber"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="QQ号码：" prop="QQ">
-                            <el-input v-model.number="fileInfo.QQ"></el-input>
+                            <el-input v-model="fileInfo.QQ"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -313,17 +314,17 @@
                 <el-row :gutter="20">
                     <el-col :span="6">
                         <el-form-item label="考生号：" prop="examineeNumber">
-                            <el-input v-model.number="fileInfo.examineeNumber"></el-input>
+                            <el-input v-model="fileInfo.examineeNumber"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="身高(M)：" prop="height">
-                            <el-input v-model.number="fileInfo.height"></el-input>
+                            <el-input v-model="fileInfo.height"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="体重(KG)：" prop="weight">
-                            <el-input v-model.number="fileInfo.weight"></el-input>
+                            <el-input v-model="fileInfo.weight"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -343,7 +344,7 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="高考成绩：" prop="gaokaoScore">
-                            <el-input v-model.number="fileInfo.gaokaoScore"></el-input>
+                            <el-input v-model="fileInfo.gaokaoScore"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -360,11 +361,7 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="专业类别：">
-                            <el-select
-                                v-model="fileInfo.admissionType"
-                                placeholder
-                                style="width:100%"
-                            >
+                            <el-select v-model="fileInfo.majorType" placeholder style="width:100%">
                                 <el-option label="文史" value="1"></el-option>
                                 <el-option label="理工" value="2"></el-option>
                                 <el-option label="艺术" value="3"></el-option>
@@ -374,9 +371,13 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <el-row style="margin-top:60px" v-if="isFormShow">
+            <el-row style="margin-top:60px" v-show="isFormShow">
                 <el-col :span="24">
-                    <el-button type="primary" icon="el-icon-check">提交</el-button>
+                    <el-button
+                        type="primary"
+                        icon="el-icon-check"
+                        @click="submitFile('fileInfo')"
+                    >提交</el-button>
                 </el-col>
             </el-row>
         </el-main>
@@ -387,8 +388,9 @@
 export default {
     data() {
         return {
-            isFormShow: true,
+            isFormShow: false,
             readonly: true,
+            buttonLoading: false,
             searchForm: {
                 userId: ""
             },
@@ -416,7 +418,7 @@ export default {
                 roomNumber: "", //宿舍号
                 email: "", //电子邮箱
                 phoneNumber: "", //电话号码
-                familNumber: "", //家庭电话
+                familyNumber: "", //家庭电话
                 address: "", //家庭所在地
                 mailNumber: "", //邮政编码
                 QQ: "", //QQ号
@@ -434,7 +436,7 @@ export default {
                 userId: [
                     {
                         required: true,
-                        type: "integer",
+                        type: "string",
                         message: "请输入用户账号(仅数字)",
                         min: 10,
                         trigger: "blur"
@@ -445,7 +447,7 @@ export default {
                 userId: [
                     {
                         required: true,
-                        type: "integer",
+                        type: "string",
                         message: "请输入用户账号(仅数字)",
                         min: 10,
                         trigger: "blur"
@@ -476,7 +478,7 @@ export default {
                 certifiacteNumber: [
                     {
                         required: true,
-                        type: "integer",
+                        type: "string",
                         message: "请输入证件号码",
                         trigger: "blur"
                     }
@@ -595,7 +597,6 @@ export default {
                 ],
                 roomNumber: [
                     {
-                        required: true,
                         message: "请输入宿舍号",
                         type: "string",
                         trigger: "blur"
@@ -611,16 +612,14 @@ export default {
                 phoneNumber: [
                     {
                         message: "请输入正确的电话",
-                        len: 11,
-                        type: "integer",
+                        type: "string",
                         trigger: "blur"
                     }
                 ],
                 familyNumber: [
                     {
                         message: "请输入正确的电话",
-                        len: 11,
-                        type: "integer",
+                        type: "string",
                         trigger: "blur"
                     }
                 ],
@@ -633,49 +632,44 @@ export default {
                 ],
                 mailNumber: [
                     {
-                        type: "integer",
-                        len: 6,
+                        type: "string",
                         message: "请输入正确的邮政编码",
                         trigger: "blur"
                     }
                 ],
                 QQ: [
                     {
-                        type: "number",
+                        type: "string",
                         message: "请输入QQ号",
                         trigger: "blur"
                     }
                 ],
                 weixin: [
                     {
-                        required: true,
                         type: "string",
                         message: "请输入微信号",
                         trigger: "blur"
                     }
                 ],
+
                 height: [
                     {
-                        type: "integer",
+                        type: "string",
                         message: "请输入身高",
-                        required: true,
                         trigger: "blur"
                     }
                 ],
                 weight: [
                     {
-                        type: "integer",
+                        type: "string",
                         message: "请输入体重",
-                        required: true,
                         trigger: "blur"
                     }
                 ],
                 gaokaoScore: [
                     {
-                        type: "integer",
-                        len: 3,
+                        type: "string",
                         message: "请输入高考成绩",
-                        required: true,
                         trigger: "blur"
                     }
                 ]
@@ -683,11 +677,136 @@ export default {
         };
     },
     methods: {
-        newFile() {},
+        newFile(formName) {
+            this.isFormShow = true;
+            this.readonly = false;
+            document
+                .getElementsByClassName("fileForm")[0]
+                .classList.add("addFile");
+            this.$refs[formName].resetFields();
+        },
         searchFile(formName) {
+            if ( //存在这个添加box-shadow的类就把它移除
+                document
+                    .getElementsByClassName("fileForm")[0]
+                    .classList.contains("addFile")
+            ) {
+                document
+                    .getElementsByClassName("fileForm")[0]
+                    .classList.remove("addFile");
+            }
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.isFormShow = !this.isFormShow;
+                    this.buttonLoading = true;
+                    let self = this;
+                    let token = sessionStorage.getItem("token"); //获取token
+                    self.$axios({
+                        method: "post",
+                        url: self.$api.fileApi.searchfile,
+                        data: this.searchForm,
+                        headers: {  //设置请求头，带token到后台
+                            Authorization: "Bearer " + token
+                        }
+                    }).then(
+                        response => {
+                            if (response.data.result == 1) {
+                                self.$message.success("档案查询成功");
+                                this.buttonLoading = false;
+                                self.isFormShow = true;
+                                self.$store.commit({   //查找到档案后，把id存到vuex中，以便update时传id到后台
+                                    type: "addFileID",
+                                    fileID: response.data.file.id
+                                });
+                                delete response.data.file.id;
+                                delete response.data.file.createdAt;
+                                delete response.data.file.updatedAt;
+                                console.log(response.data);
+                                self.fileInfo = response.data.file;
+                                self.isFormShow = true;
+                                this.readonly = true;
+                            }
+                        },
+                        error => {
+                            console.log(error);
+                            self.buttonLoading = false;
+                            self.$message.error("档案不存在");
+                        }
+                    );
+                }
+            });
+        },
+        submitFile(formName) {
+            this.fileInfo.birthday = new Date( this.fileInfo.birthday).getTime()   //后台传回数据时，date为字符串，验证会不通过，要转成adte对象
+            this.fileInfo.admissionTime = new Date( this.fileInfo.admissionTime).getTime()
+            this.$refs[formName].validate(valid => {
+                if (valid) {
+                    this.$confirm("是否确认提交?", "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning"
+                    }).then(() => {
+                        if (
+                            //如果存在这个类，就是新增档案
+                            document
+                                .getElementsByClassName("fileForm")[0]
+                                .classList.contains("addFile")
+                        ) {
+                            let self = this;
+                            let token = sessionStorage.getItem("token");   //从sessionStorage获取token
+                            self.$axios({
+                                method: "post",
+                                url: self.$api.fileApi.addfile,
+                                data: self.fileInfo,
+                                headers: {  //设置请求头，带token到后台验证
+                                    Authorization: "Bearer " + token
+                                }
+                            }).then(
+                                response => {
+                                    if (response.data.result == 1) {
+                                        self.$message.success("档案入档成功");
+                                        document 
+                                            .getElementsByClassName(
+                                                "fileForm"
+                                            )[0]
+                                            .classList.remove("addFile");
+                                    }
+                                    self.isFormShow = false;
+                                },
+                                error => {
+                                    console.log(error);
+                                    self.$message.error(
+                                        "档案入档失败,请检查档案信息"
+                                    );
+                                }
+                            );
+                        } else {
+                            //不存在这个类就是更新档案
+                            let self = this;
+                            let params = self.fileInfo;  
+                            params.id = self.$store.state.fileID;  //从vuex中获取档案的id
+                            let token = sessionStorage.getItem("token");
+                            self.$axios({
+                                method: "post",
+                                url: self.$api.fileApi.updatefile,
+                                data: params,
+                                headers: {
+                                    Authorization: "Bearer " + token
+                                }
+                            }).then(
+                                response => {
+                                    if (response.data.result == 1) {
+                                        self.$message.success("档案修改成功");
+                                    }
+                                },
+                                error => {
+                                    console.log(error);
+                                    self.$message.error(
+                                        "档案入档失败,请检查档案信息"
+                                    );
+                                }
+                            );
+                        }
+                    });
                 }
             });
         }
@@ -727,7 +846,12 @@ export default {
     margin-bottom: 20px;
 }
 .fileForm {
+    padding: 20px;
     margin: auto;
     width: 80%;
+}
+.addFile {
+    border: 2px solid #007bff;
+    box-shadow: 0px 0px 60px #007bff;
 }
 </style>

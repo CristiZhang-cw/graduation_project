@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
-    class Model extends Sequelize.Model { }
+    class Model extends Sequelize.Model {}
     Model.init({
         userId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             unique: true,
             allowNull: false
         },
@@ -23,10 +23,9 @@ module.exports = (sequelize, DataTypes) => {
             validate: { len: 1 }
         },
         certifiacteNumber: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING, //integer最大11位
             allowNull: false,
             validate: { len: 18 }
-
         },
         nation: {
             type: DataTypes.STRING,
@@ -105,12 +104,12 @@ module.exports = (sequelize, DataTypes) => {
             validate: { isEmail: true }
         },
         phoneNumber: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true,
             validate: { len: 11 }
         },
         familyNumber: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true,
             validate: { len: 11 }
         },
@@ -119,24 +118,28 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         mailNumber: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true,
             validate: { len: 6 }
         },
         QQ: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true
         },
         weixin: {
             type: DataTypes.STRING,
             allowNull: true
         },
+        examineeNumber:{
+            type: DataTypes.STRING,
+            allowNull: true
+        },
         height: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true
         },
         weight: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true
         },
         marriage: {
@@ -149,7 +152,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         gaokaoScore: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true,
             validate: { len: 3 }
         },
@@ -169,4 +172,5 @@ module.exports = (sequelize, DataTypes) => {
             modelName: 'fileInfo'
         }
     )
+    return Model
 }

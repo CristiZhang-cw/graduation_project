@@ -3,6 +3,7 @@ const { fileInfo } = require('../models')
 module.exports = {
     async addfile(request, response) {
         try {
+            // console.log(request.body);
             const file = await fileInfo.create(request.body)
             response.status(200).send({
                 result: 1,
@@ -10,7 +11,6 @@ module.exports = {
             })
         } catch (error) {
             response.status(400).send({
-                result: 0,
                 code: 400,
                 error: '档案新建失败'
             })
@@ -35,11 +35,14 @@ module.exports = {
             const file = await fileInfo.update(request.body,
                 {
                     where: {
-                        id: request.body.fileID
+                        id: request.body.id
                     }
                 }
             )
-            response.status(200).send({ file })
+            response.status(200).send({
+                result: 1,
+                file
+            })
         } catch (error) {
             response.status(500).send({
                 code: 500,
@@ -48,6 +51,7 @@ module.exports = {
         }
     },
     async searchfile(request, response) {
+        console.log(request.body);
         try {
             const file = await fileInfo.findOne({
                 where: {
@@ -55,7 +59,10 @@ module.exports = {
                 }
             })
             if (file) {
-                response.status(200).send({ file })
+                response.status(200).send({
+                    result: 1,
+                    file
+                })
             } else {
                 response.status(400).send({
                     code: 400,

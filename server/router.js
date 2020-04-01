@@ -17,6 +17,6 @@ module.exports = (app) => {
     app.post('/user/select', AuthenticatePolicy.isValidToken, UserController.select)    //账号查
     app.post('/file/addfile', AuthenticatePolicy.isValidToken, fileInfoController.addfile) //档案增
     app.post('/file/deletefile', AuthenticatePolicy.isValidToken, fileInfoController.deletefile) //档案删
-    app.post('file/updatefile', AuthenticatePolicy.isValidToken, fileInfoController.updatefile)  //档案改
+    app.post('/file/updatefile', AuthenticatePolicy.isValidToken, fileInfoController.updatefile)  //档案改
     app.post('/file/searchfile', AuthenticatePolicy.isValidToken, fileInfoController.searchfile) //档案查
 }

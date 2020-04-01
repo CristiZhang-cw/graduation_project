@@ -18,6 +18,9 @@ const store = new Vuex.Store({
         removeAccount(state,payload) {
             sessionStorage.removeItem('token')
             state.token = payload.token
+        },
+        addFileID(state,payload){
+            state.fileID = payload.fileID
         }
     },
     actions: {}
