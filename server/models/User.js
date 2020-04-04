@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         role: {
-            type: DataTypes.INTEGER, //整形
+            type: DataTypes.STRING,
             allowNull: false, //不为空
         }
     },

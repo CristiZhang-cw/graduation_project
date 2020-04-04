@@ -27,10 +27,17 @@ module.exports = {
     },
     async select(request, response) {  //查询
         try {
-            const user = await User.findByPk(request.body.id) //Pk是primary key findByPk()根据主键查询
+            const user = await User.findOne({
+                where: {
+                    userId: request.body.userId
+                }
+            }) //Pk是primary key findByPk()根据主键查询
             // console.log(request.body.id);
             if (user) {
-                response.status(200).send({ user })
+                response.status(200).send({
+                    result: 1,
+                    user: user
+                })
             } else {
                 response.status(400).send({
                     code: 400,
@@ -53,7 +60,10 @@ module.exports = {
                     }
                 }
             )
-            response.status(200).send({ user })
+            response.status(200).send({
+                result: 1,
+                user: user
+            })
         } catch (error) {
             response.status(500).send({
                 code: 500,
@@ -70,7 +80,10 @@ module.exports = {
                     }
                 }
             )
-            response.status(200).send({ message: '数据删除成功' })
+            response.status(200).send({
+                result: 1,
+                message: '数据删除成功'
+            })
         } catch (error) {
             response.status(500).send({ message: '数据删除失败' })
         }

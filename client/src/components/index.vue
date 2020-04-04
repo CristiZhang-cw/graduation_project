@@ -125,9 +125,21 @@ export default {
                 name: 'fileInfoManagement'
             })
         },
-        deletedFile() {},
-        userAccount() {},
-        messageBoard() {}
+        deletedFile() {
+            this.$router.push({
+                name: 'deletedFileManagement'
+            })
+        },
+        userAccount() {
+            this.$router.push({
+                name: 'accountManagement'
+            })
+        },
+        messageBoard() {
+            this.$router.push({
+                name: 'messageBoard'
+            })
+        }
     }
 };
 </script>

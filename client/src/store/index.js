@@ -12,8 +12,8 @@ const store = new Vuex.Store({
     mutations: {
         addAccount(state, payload) {
             sessionStorage.setItem('token',payload.token)
-            state.token = payload.token
-            state.ID = payload.ID
+            state.token = payload.token   //登录时存入token
+            state.ID = payload.ID           //登录时存入id（数据库主键）
         },
         removeAccount(state,payload) {
             sessionStorage.removeItem('token')

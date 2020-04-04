@@ -24,7 +24,6 @@
                     <el-input
                         class="search-input"
                         v-model="searchForm.userId"
-                        el-icon-plus
                         placeholder="请输入需要查询的用户ID"
                     ></el-input>
                 </el-form-item>
@@ -686,7 +685,8 @@ export default {
             this.$refs[formName].resetFields();
         },
         searchFile(formName) {
-            if ( //存在这个添加box-shadow的类就把它移除
+            if (
+                //存在这个添加box-shadow的类就把它移除
                 document
                     .getElementsByClassName("fileForm")[0]
                     .classList.contains("addFile")
@@ -704,7 +704,8 @@ export default {
                         method: "post",
                         url: self.$api.fileApi.searchfile,
                         data: this.searchForm,
-                        headers: {  //设置请求头，带token到后台
+                        headers: {
+                            //设置请求头，带token到后台
                             Authorization: "Bearer " + token
                         }
                     }).then(
@@ -713,7 +714,8 @@ export default {
                                 self.$message.success("档案查询成功");
                                 this.buttonLoading = false;
                                 self.isFormShow = true;
-                                self.$store.commit({   //查找到档案后，把id存到vuex中，以便update时传id到后台
+                                self.$store.commit({
+                                    //查找到档案后，把id存到vuex中，以便update时传id到后台
                                     type: "addFileID",
                                     fileID: response.data.file.id
                                 });
@@ -736,8 +738,10 @@ export default {
             });
         },
         submitFile(formName) {
-            this.fileInfo.birthday = new Date( this.fileInfo.birthday).getTime()   //后台传回数据时，date为字符串，验证会不通过，要转成adte对象
-            this.fileInfo.admissionTime = new Date( this.fileInfo.admissionTime).getTime()
+            this.fileInfo.birthday = new Date(this.fileInfo.birthday).getTime(); //后台传回数据时，date为字符串，验证会不通过，要转成date对象
+            this.fileInfo.admissionTime = new Date(
+                this.fileInfo.admissionTime
+            ).getTime();
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.$confirm("是否确认提交?", "提示", {
@@ -752,19 +756,20 @@ export default {
                                 .classList.contains("addFile")
                         ) {
                             let self = this;
-                            let token = sessionStorage.getItem("token");   //从sessionStorage获取token
+                            let token = sessionStorage.getItem("token"); //从sessionStorage获取token
                             self.$axios({
                                 method: "post",
                                 url: self.$api.fileApi.addfile,
                                 data: self.fileInfo,
-                                headers: {  //设置请求头，带token到后台验证
+                                headers: {
+                                    //设置请求头，带token到后台验证
                                     Authorization: "Bearer " + token
                                 }
                             }).then(
                                 response => {
                                     if (response.data.result == 1) {
                                         self.$message.success("档案入档成功");
-                                        document 
+                                        document
                                             .getElementsByClassName(
                                                 "fileForm"
                                             )[0]
@@ -782,8 +787,8 @@ export default {
                         } else {
                             //不存在这个类就是更新档案
                             let self = this;
-                            let params = self.fileInfo;  
-                            params.id = self.$store.state.fileID;  //从vuex中获取档案的id
+                            let params = self.fileInfo;
+                            params.id = self.$store.state.fileID; //从vuex中获取档案的id
                             let token = sessionStorage.getItem("token");
                             self.$axios({
                                 method: "post",
