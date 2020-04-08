@@ -99,7 +99,7 @@ module.exports = {
             if (isValidPassword) {
                 response.send({
                     result: 1,
-                    user: user.toJSON(),
+                    user: user,
                     token: tokenSign(user) //验证登录信息正确后，调用tokenSign函数 返回创建的token
                 })
             } else {   //用户名正确密码不正确时

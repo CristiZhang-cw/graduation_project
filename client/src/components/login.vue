@@ -72,7 +72,8 @@ export default {
                                     self.$store.commit({
                                         type: "addAccount",
                                         token: response.data.token,
-                                        ID: response.data.id
+                                        ID: response.data.user.id,
+                                        userId: response.data.user.userId
                                     });
                                     self.$router.push({
                                         name: "index"
