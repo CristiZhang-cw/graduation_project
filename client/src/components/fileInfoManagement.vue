@@ -327,8 +327,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="婚姻状况：">
-                            <el-select v-model="fileInfo.marriage" placeholder style="width:100%">
+                        <el-form-item label="婚姻状况：" prop="marriage">
+                            <el-select v-model="fileInfo.marriage" style="width:100%">
                                 <el-option label="未婚" value="0"></el-option>
                                 <el-option label="已婚" value="1"></el-option>
                                 <el-option label="离婚" value="2"></el-option>
@@ -337,7 +337,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="毕业中学：">
+                        <el-form-item label="毕业中学：" prop="highSchool">
                             <el-input v-model="fileInfo.highSchool"></el-input>
                         </el-form-item>
                     </el-col>
@@ -347,7 +347,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="入学方式：">
+                        <el-form-item label="入学方式：" prop="admissionType">
                             <el-select
                                 v-model="fileInfo.admissionType"
                                 placeholder
@@ -359,7 +359,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="专业类别：">
+                        <el-form-item label="专业类别：" prop="majorType">
                             <el-select v-model="fileInfo.majorType" placeholder style="width:100%">
                                 <el-option label="文史" value="1"></el-option>
                                 <el-option label="理工" value="2"></el-option>
@@ -377,6 +377,7 @@
                         icon="el-icon-check"
                         @click="submitFile('fileInfo')"
                     >提交</el-button>
+                    <el-button type="danger" icon="el-icon-close" @click="deletedFile()">档案出档</el-button>
                 </el-col>
             </el-row>
         </el-main>
@@ -665,10 +666,34 @@ export default {
                         trigger: "blur"
                     }
                 ],
+                marriage: [
+                    {
+                        type: "string",
+                        trigger: "blur"
+                    }
+                ],
+                highSchool: [
+                    {
+                        type: "string",
+                        trigger: "blur"
+                    }
+                ],
                 gaokaoScore: [
                     {
                         type: "string",
                         message: "请输入高考成绩",
+                        trigger: "blur"
+                    }
+                ],
+                admissionType: [
+                    {
+                        type: "string",
+                        trigger: "blur"
+                    }
+                ],
+                majorType: [
+                    {
+                        type: "string",
                         trigger: "blur"
                     }
                 ]
@@ -677,7 +702,7 @@ export default {
     },
     methods: {
         newFile(formName) {
-            this.isFormShow = true;
+            this.isFormShow = true; //使用v-show绑定，因为js执行速度大于dom加载速度，使用v-if会导致后面几行代码失效
             this.readonly = false;
             document
                 .getElementsByClassName("fileForm")[0]
@@ -731,6 +756,7 @@ export default {
                         error => {
                             console.log(error);
                             self.buttonLoading = false;
+                            self.$refs['fileInfo'].resetFields();
                             self.$message.error("档案不存在");
                         }
                     );
@@ -813,6 +839,35 @@ export default {
                         }
                     });
                 }
+            });
+        },
+        deletedFile() {
+            this.$confirm("是否进行档案出档?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).then(() => {
+                let token = sessionStorage.getItem("token"); //从sessionStorage获取token
+                let params = {
+                    id: this.$store.state.fileID
+                };
+                this.$axios({
+                    method: "post",
+                    url: this.$api.fileApi.deletedFile,
+                    data: params,
+                    headers: {
+                        Authorization: "Bearer " + token
+                    }
+                }).then(
+                    response => {
+                        console.log(response);
+                        this.$message.success("出档成功");
+                    },
+                    error => {
+                        console.log(error);
+                        this.$message.success("出档失败");
+                    }
+                );
             });
         }
     }

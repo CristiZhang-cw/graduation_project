@@ -21,7 +21,7 @@ module.exports = {
             await fileInfo.destroy(
                 {
                     where: {
-                        id: request.body.fileID
+                        id: request.body.id
                     }
                 }
             )
